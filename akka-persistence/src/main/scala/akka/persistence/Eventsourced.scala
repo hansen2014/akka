@@ -91,7 +91,9 @@ private[persistence] trait Eventsourced extends Processor {
     }
 
     def identical(a: Any, b: Any): Boolean =
-      a.asInstanceOf[AnyRef] eq b.asInstanceOf[AnyRef]
+      // FIXME had to change to == because journal is on remote node.
+      //       == is probably costly, can we include some other id?
+      a.asInstanceOf[AnyRef] == b.asInstanceOf[AnyRef]
   }
 
   private var persistInvocations: List[(Any, Any ⇒ Unit)] = Nil

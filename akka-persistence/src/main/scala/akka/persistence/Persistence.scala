@@ -69,7 +69,7 @@ class Persistence(val system: ExtendedActorSystem) extends Extension {
     val pluginClassName = pluginConfig.getString("class")
     val pluginClass = system.dynamicAccess.getClassFor[AnyRef](pluginClassName).get
     val pluginDispatcherId = if (pluginConfig.hasPath("plugin-dispatcher")) pluginConfig.getString("plugin-dispatcher") else dispatcherSelector(pluginClass)
-    system.actorOf(Props(pluginClass).withDispatcher(pluginDispatcherId))
+    system.actorOf(Props(pluginClass).withDispatcher(pluginDispatcherId), pluginType)
   }
 
   private def id(ref: ActorRef) = ref.path.toStringWithAddress(system.provider.getDefaultAddress)

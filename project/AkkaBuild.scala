@@ -600,7 +600,7 @@ object AkkaBuild extends Build {
   lazy val contrib = Project(
     id = "akka-contrib",
     base = file("akka-contrib"),
-    dependencies = Seq(remote, remoteTests % "test->test", cluster),
+    dependencies = Seq(remote, remoteTests % "test->test", cluster, persistence),
     settings = defaultSettings ++ scaladocSettings ++ javadocSettings ++ multiJvmSettings ++ Seq(
       libraryDependencies ++= Dependencies.contrib,
       testOptions += Tests.Argument(TestFrameworks.JUnit, "-v"),
@@ -1146,7 +1146,7 @@ object Dependencies {
 
   val clusterSample = Seq(Test.scalatest, sigar)
 
-  val contrib = Seq(Test.junitIntf)
+  val contrib = Seq(Test.junitIntf, Test.commonsIo)
 
   val multiNodeSample = Seq(Test.scalatest)
 }

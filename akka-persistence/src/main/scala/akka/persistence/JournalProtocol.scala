@@ -9,9 +9,11 @@ import scala.collection.immutable
 import akka.actor._
 
 /**
+ * INTERNAL API
+ *
  * Defines messages exchanged between processors, channels and a journal.
  */
-private[persistence] object JournalProtocol {
+private[akka] object JournalProtocol {
   /**
    * Instructs a journal to delete a persistent message identified by `processorId`
    * and `sequenceNr`. If `physical` is set to `false`, the persistent message is

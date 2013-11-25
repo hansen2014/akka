@@ -16,22 +16,22 @@ object CustomRouteExample {
 
   def main(args: Array[String]): Unit = {
     val system = ActorSystem("some-system")
-    val producer = system.actorOf(Props[Producer1])
-    val mediator = system.actorOf(Props(classOf[Transformer], producer))
-    val consumer = system.actorOf(Props(classOf[Consumer3], mediator))
+    val producer = system.actorOf(Props[RouteProducer])
+    val mediator = system.actorOf(Props(classOf[RouteTransformer], producer))
+    val consumer = system.actorOf(Props(classOf[RouteConsumer], mediator))
     CamelExtension(system).context.addRoutes(new CustomRouteBuilder)
   }
 
-  class Consumer3(transformer: ActorRef) extends Actor with Consumer {
+  class RouteConsumer(transformer: ActorRef) extends Actor with Consumer {
     def endpointUri = "jetty:http://0.0.0.0:8877/camel/welcome"
 
     def receive = {
       // Forward a string representation of the message body to transformer
-      case msg: CamelMessage => transformer.forward(msg.bodyAs[String])
+      case msg: CamelMessage => transformer.forward(msg.withBodyAs[String])
     }
   }
 
-  class Transformer(producer: ActorRef) extends Actor {
+  class RouteTransformer(producer: ActorRef) extends Actor {
     def receive = {
       // example: transform message body "foo" to "- foo -" and forward result
       // to producer
@@ -40,7 +40,7 @@ object CustomRouteExample {
     }
   }
 
-  class Producer1 extends Actor with Producer {
+  class RouteProducer extends Actor with Producer {
     def endpointUri = "direct:welcome"
   }
 

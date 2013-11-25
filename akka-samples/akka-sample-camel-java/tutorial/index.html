@@ -43,15 +43,18 @@ behind an HTTP proxy.
 <p>
 The following figure gives an overview how the example actors interact with
 external systems and with each other. A browser sends a GET request to
-http://localhost:8875 which is the published endpoint of the <code>HttpConsumer</code>
-actor. The <code>HttpConsumer</code>actor forwards the requests to the <code>HttpProducer</code>
+http://localhost:8875 which is the published endpoint of the
+<a href="#code/src/main/java/sample/camel/http/HttpConsumer.java" class="shortcut">HttpConsumer</a>
+actor. The <code>HttpConsumer</code>actor forwards the requests to the
+<a href="#code/src/main/java/sample/camel/http/HttpProducer.java" class="shortcut">HttpProducer.java</a>
 actor which retrieves the Akka homepage from http://akka.io. The retrieved HTML
-is then forwarded to the <code>HttpTransformer</code> actor which replaces all occurrences
-of *Akka* with *AKKA*. The transformation result is sent back the HttpConsumer
+is then forwarded to the 
+<a href="#code/src/main/java/sample/camel/http/HttpTransformer.java" class="shortcut">HttpTransformer.java</a>
+actor which replaces all occurrences of *Akka* with *AKKA*. The transformation result is sent back the HttpConsumer
 which finally returns it to the browser.
 </p>
 
-<a href="tutorial/camel-async-interact.png" target="_blank"><img src="tutorial/camel-async-interact.png" width="400" /></a>
+<img src="tutorial/camel-async-interact.png" width="400" />
 
 <p>
 Implementing the example actor classes and wiring them together is rather easy
@@ -69,7 +72,7 @@ on the consumer-side and by using <a href="http://wiki.eclipse.org/Jetty/Tutoria
 on the producer side. The following high-level sequence diagram illustrates that.
 </p>
 
-<a href="tutorial/camel-async-sequence.png" target="_blank"><img src="tutorial/camel-async-sequence.png" width="400" /></a>
+<img src="tutorial/camel-async-sequence.png" width="400" />
 
 </div>
 <div>
@@ -77,12 +80,15 @@ on the producer side. The following high-level sequence diagram illustrates that
 <h2>Custom Camel route example</h2>
 
 <p>
-This section also demonstrates the combined usage of a <code>Producer</code> and a
-<code>Consumer</code> actor as well as the inclusion of a custom Camel route. The
-following figure gives an overview.
+This section also demonstrates the combined usage of a
+<a href="#code/src/main/java/sample/camel/route/RouteProducer.java" class="shortcut">RouteProducer</a> and a
+<a href="#code/src/main/java/sample/camel/route/RouteConsumer.java" class="shortcut">RouteConsumer</a>
+actor as well as the inclusion of a 
+<a href="#code/src/main/java/sample/camel/route/CustomRouteSample.java" class="shortcut">custom Camel route</a>.
+The following figure gives an overview.
 </p>
 
-<a href="tutorial/camel-custom-route.png" target="_blank"><img src="tutorial/camel-custom-route.png" width="400" /></a>
+<img src="tutorial/camel-custom-route.png" width="400" />
 
 <ul>
 <li>A consumer actor receives a message from an HTTP client</li>
@@ -101,11 +107,6 @@ following figure gives an overview.
 <li>The producer actor sends the result back to the consumer actor which returns
   it to the HTTP client</li>
 </ul>
-
-<p>
-The consumer, transformer and producer actor implementations are in 
-<a href="#code/src/main/java/sample/camel/route/" class="shortcut">sample.camle.route</a>.
-</p>
 
 <p>
 The producer actor knows where to reply the message to because the consumer and
@@ -140,7 +141,7 @@ The response should be:
 <h2>Quartz Scheduler Example</h2>
 
 <p>
-Here is an example showing how simple is to implement a cron-style scheduler by
+Here is an example showing how simple it is to implement a cron-style scheduler by
 using the Camel Quartz component in Akka.
 </p>
 <p>

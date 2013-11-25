@@ -16,9 +16,13 @@ public class HttpProducer extends UntypedProducerActor {
   }
 
   public String getEndpointUri() {
+    // bridgeEndpoint=true makes the producer ignore the Exchange.HTTP_URI header, 
+    // and use the endpoint's URI for request
     return "jetty://http://akka.io/?bridgeEndpoint=true";
   }
 
+  // before producing messages to endpoints, producer actors can pre-process
+  // them by overriding the onTransformOutgoingMessage method
   @Override
   public Object onTransformOutgoingMessage(Object message) {
     if (message instanceof CamelMessage) {
@@ -30,6 +34,8 @@ public class HttpProducer extends UntypedProducerActor {
       return super.onTransformOutgoingMessage(message);
   }
 
+  // instead of replying to the initial sender, producer actors can implement custom
+  // response processing by overriding the onRouteResponse method
   @Override
   public void onRouteResponse(Object message) {
     transformer.forward(message, getContext());

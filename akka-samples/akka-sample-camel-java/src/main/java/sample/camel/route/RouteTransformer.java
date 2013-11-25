@@ -5,10 +5,10 @@ import akka.actor.UntypedActor;
 import akka.camel.CamelMessage;
 import akka.dispatch.Mapper;
 
-public class Transformer extends UntypedActor {
+public class RouteTransformer extends UntypedActor {
   private ActorRef producer;
 
-  public Transformer(ActorRef producer) {
+  public RouteTransformer(ActorRef producer) {
     this.producer = producer;
   }
 

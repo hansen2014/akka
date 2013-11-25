@@ -4,10 +4,10 @@ import akka.actor.ActorRef;
 import akka.camel.CamelMessage;
 import akka.camel.javaapi.UntypedConsumerActor;
 
-public class Consumer3 extends UntypedConsumerActor {
+public class RouteConsumer extends UntypedConsumerActor {
   private ActorRef transformer;
 
-  public Consumer3(ActorRef transformer) {
+  public RouteConsumer(ActorRef transformer) {
     this.transformer = transformer;
   }
 

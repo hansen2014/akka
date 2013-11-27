@@ -8,6 +8,7 @@ import scala.collection.immutable
 import java.lang.reflect.Type
 import scala.annotation.tailrec
 import java.lang.reflect.ParameterizedType
+import scala.util.Try
 
 /**
  * Collection of internal reflection utilities which may or may not be
@@ -80,15 +81,21 @@ private[akka] object Reflect {
       val argClasses = args map safeGetClass mkString ", "
       throw new IllegalArgumentException(s"$msg found on $clazz for arguments [$argClasses]")
     }
-    val candidates =
-      clazz.getDeclaredConstructors filter (c ⇒
-        c.getParameterTypes.length == args.length &&
-          (c.getParameterTypes zip args forall {
-            case (found, required) ⇒
-              found.isInstance(required) || BoxedType(found).isInstance(required) ||
-                (required == null && !found.isPrimitive)
-          }))
-    if (candidates.size == 1) candidates.head.asInstanceOf[Constructor[T]]
+
+    val candidates: Array[Constructor[T]] =
+      if (args.isEmpty) Try { clazz.getDeclaredConstructor() } map { Array(_) } getOrElse (Array.empty)
+      else {
+        val length = args.length
+        clazz.getDeclaredConstructors.asInstanceOf[Array[Constructor[T]]] filter (c ⇒
+          c.getParameterTypes.length == length &&
+            (c.getParameterTypes zip args forall {
+              case (found, required) ⇒
+                found.isInstance(required) || BoxedType(found).isInstance(required) ||
+                  (required == null && !found.isPrimitive)
+            }))
+      }
+
+    if (candidates.size == 1) candidates.head
     else if (candidates.size > 1) error("multiple matching constructors")
     else error("no matching constructor")
   }

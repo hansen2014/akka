@@ -436,7 +436,7 @@ object AkkaBuild extends Build {
     id = "akka-samples",
     base = file("akka-samples"),
     settings = parentSettings,
-    aggregate = Seq(fsmSample, helloKernelSample, persistenceSample, clusterSample, multiNodeSample, osgiDiningHakkersSample)
+    aggregate = Seq(fsmSample, helloKernelSample, persistenceSample, multiNodeSample, osgiDiningHakkersSample)
   )
 
   lazy val fsmSample = Project(
@@ -459,24 +459,6 @@ object AkkaBuild extends Build {
     dependencies = Seq(actor, persistence),
     settings = sampleSettings
   )
-
-  lazy val clusterSample = Project(
-    id = "akka-sample-cluster",
-    base = file("akka-samples/akka-sample-cluster"),
-    dependencies = Seq(cluster, contrib, remoteTests % "test", testkit % "test"),
-    settings = sampleSettings ++ multiJvmSettings ++ Seq(
-      libraryDependencies ++= Dependencies.clusterSample,
-      javaOptions in run ++= Seq(
-        "-Djava.library.path=./sigar",
-        "-Xms128m", "-Xmx1024m"),
-      Keys.fork in run := true,
-      // disable parallel tests
-      parallelExecution in Test := false,
-      extraOptions in MultiJvm <<= (sourceDirectory in MultiJvm) { src =>
-        (name: String) => (src ** (name + ".conf")).get.headOption.map("-Dakka.config=" + _.absolutePath).toSeq
-      }
-    )
-  ) configs (MultiJvm)
 
   lazy val multiNodeSample = Project(
     id = "akka-sample-multi-node",
@@ -1120,8 +1102,6 @@ object Dependencies {
   val docs = Seq(Test.scalatest, Test.junit, Test.junitIntf)
 
   val zeroMQ = Seq(protobuf, zeroMQClient, Test.scalatest, Test.junit)
-
-  val clusterSample = Seq(Test.scalatest, sigar)
 
   val contrib = Seq(Test.junitIntf)
 
